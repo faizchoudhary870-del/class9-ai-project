@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 9 AI | Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = { darkMode: 'class' }
+
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(p => p.classList.add('hidden'));
+            
+            // Show selected page
+            document.getElementById(pageId).classList.remove('hidden');
+            
+            // Close sidebar if open
+            document.getElementById('sidebar').classList.add('-translate-x-full');
+            window.scrollTo(0,0);
+        }
+
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+        }
+
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+        }
+    </script>
+    <style>
+        .page-content { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .grad-blue { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+        .grad-purple { background: linear-gradient(135deg, #581c87 0%, #a855f7 100%); }
+        .grad-green { background: linear-gradient(135deg, #064e3b 0%, #10b981 100%); }
+        .grad-orange { background: linear-gradient(135deg, #7c2d12 0%, #f97316 100%); }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300">
+
+    <div id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-white dark:bg-slate-900 shadow-2xl transform -translate-x-full transition-transform duration-300 z-50 p-6">
+        <div class="flex justify-between items-center mb-8">
+            <span class="font-black text-xl text-blue-500">NAVIGATION</span>
+            <button onclick="toggleMenu()" class="text-2xl">&times;</button>
+        </div>
+        <nav class="space-y-4">
+            <button onclick="showPage('home-page')" class="w-full text-left p-3 hover:bg-blue-50 dark:hover:bg-slate-800 rounded-xl flex items-center gap-3"><i class="fas fa-home"></i> Home</button>
+            <button onclick="showPage('notes-page')" class="w-full text-left p-3 hover:bg-blue-50 dark:hover:bg-slate-800 rounded-xl flex items-center gap-3 text-blue-500 font-bold"><i class="fas fa-book"></i> Smart Notes</button>
+            <button onclick="showPage('papers-page')" class="w-full text-left p-3 hover:bg-purple-50 dark:hover:bg-slate-800 rounded-xl flex items-center gap-3 text-purple-500 font-bold"><i class="fas fa-file-alt"></i> Past Papers</button>
+            <button onclick="showPage('syllabus-page')" class="w-full text-left p-3 hover:bg-green-50 dark:hover:bg-slate-800 rounded-xl flex items-center gap-3 text-green-500 font-bold"><i class="fas fa-list"></i> Syllabus</button>
+            <button onclick="showPage('about-page')" class="w-full text-left p-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl flex items-center gap-3"><i class="fas fa-users"></i> About Us</button>
+        </nav>
+    </div>
+
+    <nav class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b dark:border-slate-800 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleMenu()" class="text-xl"><i class="fas fa-bars"></i></button>
+                <h1 class="font-black text-2xl tracking-tighter cursor-pointer" onclick="showPage('home-page')">CLASS 9 <span class="text-blue-500">AI</span></h1>
+            </div>
+            <button onclick="toggleTheme()" class="bg-slate-200 dark:bg-slate-800 p-2 rounded-full w-10 h-10"><i class="fas fa-circle-half-stroke"></i></button>
+        </div>
+    </nav>
+
+    <div id="home-page" class="page-content p-6 max-w-7xl mx-auto py-12">
+        <div class="text-center mb-16">
+            <h2 class="text-5xl font-black mb-4">Choose Your Path</h2>
+            <p class="text-slate-500">Everything a Class 9 student needs, powered by AI.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div onclick="showPage('notes-page')" class="grad-blue p-8 rounded-3xl text-white cursor-pointer hover:scale-105 transition-transform shadow-xl">
+                <i class="fas fa-book text-4xl mb-4"></i>
+                <h3 class="text-2xl font-bold">Smart Notes</h3>
+                <p class="opacity-80">AI-powered summaries for all subjects.</p>
+            </div>
+            <div onclick="showPage('papers-page')" class="grad-purple p-8 rounded-3xl text-white cursor-pointer hover:scale-105 transition-transform shadow-xl">
+                <i class="fas fa-file-invoice text-4xl mb-4"></i>
+                <h3 class="text-2xl font-bold">Past Papers</h3>
+                <p class="opacity-80">Last 10 years solved papers.</p>
+            </div>
+            <div onclick="showPage('syllabus-page')" class="grad-green p-8 rounded-3xl text-white cursor-pointer hover:scale-105 transition-transform shadow-xl">
+                <i class="fas fa-map text-4xl mb-4"></i>
+                <h3 class="text-2xl font-bold">Syllabus</h3>
+                <p class="opacity-80">Latest board updates for 2026.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="notes-page" class="page-content hidden p-6 max-w-7xl mx-auto py-12">
+        <div class="grad-blue p-12 rounded-[3rem] text-white mb-10 shadow-2xl">
+            <h2 class="text-4xl font-black mb-4">Class 9 Smart Notes</h2>
+            <p>Select a subject to get started with AI-generated quick revision notes.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border dark:border-slate-800 flex justify-between items-center">
+                <span>Physics: Motion & Laws</span>
+                <button class="bg-blue-600 px-4 py-2 rounded-lg text-sm">Read Notes</button>
+            </div>
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border dark:border-slate-800 flex justify-between items-center">
+                <span>Chemistry: Atoms & Molecules</span>
+                <button class="bg-blue-600 px-4 py-2 rounded-lg text-sm">Read Notes</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="papers-page" class="page-content hidden p-6 max-w-7xl mx-auto py-12">
+        <div class="grad-purple p-12 rounded-[3rem] text-white mb-10 shadow-2xl text-center">
+            <h2 class="text-4xl font-black mb-4 uppercase tracking-widest">Question Bank</h2>
+            <p>Unlock the secrets of previous toppers with solved papers.</p>
+        </div>
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border dark:border-slate-800">
+            <h3 class="font-bold text-xl mb-4">2025 Mid-Term Papers</h3>
+            <ul class="space-y-3">
+                <li class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg flex gap-3 items-center"><i class="fas fa-download text-purple-500"></i> Mathematics - Set A</li>
+                <li class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg flex gap-3 items-center"><i class="fas fa-download text-purple-500"></i> Science - Set B</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="syllabus-page" class="page-content hidden p-6 max-w-7xl mx-auto py-12">
+        <div class="grad-green p-12 rounded-[3rem] text-white mb-10 shadow-2xl">
+            <h2 class="text-4xl font-black mb-4">Official Syllabus 2026</h2>
+            <p>Know exactly what's coming in the exam.</p>
+        </div>
+        <div class="space-y-4">
+            <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border dark:border-slate-800">
+                <h4 class="font-bold text-green-500 mb-2 underline italic">Mathematics</h4>
+                <p class="text-sm opacity-70">Focus on Surface Areas, Volumes, and Circles.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="about-page" class="page-content hidden p-6 max-w-7xl mx-auto py-12 text-center">
+        <h2 class="text-4xl font-bold mb-6">About Us</h2>
+        <div class="max-w-2xl mx-auto bg-white dark:bg-slate-900 p-10 rounded-3xl shadow-xl">
+            <p class="mb-6">We are a student-led initiative aiming to bring the power of Artificial Intelligence to the Class 9 classroom.</p>
+            <p class="text-sm text-slate-500 italic font-mono uppercase">Version 1.0.0 | Developer: Your Name</p>
+        </div>
+    </div>
+
+    <footer class="mt-20 border-t dark:border-slate-800 p-10 text-center">
+        <div class="flex justify-center gap-6 mb-4 text-xl opacity-50">
+            <i class="fab fa-instagram"></i><i class="fab fa-twitter"></i><i class="fab fa-github"></i>
+        </div>
+        <p class="text-sm opacity-60 font-medium">© 2026 Class 9 AI Hub. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
