@@ -3,21 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class 9 AI | Hub</title>
+    <title>Class 9 AI | Master Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script>
         tailwind.config = { darkMode: 'class' }
 
+        // Navigation Logic
         function showPage(pageId) {
-            // Hide all pages
-            const pages = document.querySelectorAll('.page-content');
-            pages.forEach(p => p.classList.add('hidden'));
-            
-            // Show selected page
+            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
             document.getElementById(pageId).classList.remove('hidden');
-            
-            // Close sidebar if open
             document.getElementById('sidebar').classList.add('-translate-x-full');
             window.scrollTo(0,0);
         }
@@ -29,123 +24,118 @@
         function toggleTheme() {
             document.documentElement.classList.toggle('dark');
         }
+
+        // AI Logic - Calls your Vercel /api/solve.js
+        async function askAI() {
+            const query = document.getElementById('ai-input').value;
+            const responseDiv = document.getElementById('ai-output');
+            
+            if(!query) return alert("Please enter a question!");
+
+            responseDiv.classList.remove('hidden');
+            responseDiv.innerHTML = `<i class="fas fa-circle-notch animate-spin mr-2"></i> AI Teacher is thinking...`;
+
+            try {
+                const res = await fetch('/api/solve', {
+                    method: 'POST',
+                    body: JSON.stringify({ prompt: query })
+                });
+                const data = await res.json();
+                responseDiv.innerHTML = data.choices[0].message.content.replace(/\n/g, '<br>');
+            } catch (err) {
+                responseDiv.innerHTML = "Error connecting to AI. Make sure Vercel environment variables are set.";
+            }
+        }
     </script>
     <style>
-        .page-content { animation: fadeIn 0.4s ease-out; }
+        .page-content { animation: fadeIn 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .grad-blue { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
-        .grad-purple { background: linear-gradient(135deg, #581c87 0%, #a855f7 100%); }
-        .grad-green { background: linear-gradient(135deg, #064e3b 0%, #10b981 100%); }
-        .grad-orange { background: linear-gradient(135deg, #7c2d12 0%, #f97316 100%); }
+        .grad-physics { background: linear-gradient(135deg, #1e3a8a, #3b82f6); }
+        .grad-chem { background: linear-gradient(135deg, #581c87, #a855f7); }
+        .grad-bio { background: linear-gradient(135deg, #064e3b, #10b981); }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
 
     <div id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-white dark:bg-slate-900 shadow-2xl transform -translate-x-full transition-transform duration-300 z-50 p-6">
-        <div class="flex justify-between items-center mb-8">
-            <span class="font-black text-xl text-blue-500">NAVIGATION</span>
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="text-xl font-bold text-blue-500">CLASS 9 MENU</h2>
             <button onclick="toggleMenu()" class="text-2xl">&times;</button>
         </div>
-        <nav class="space-y-4">
-            <button onclick="showPage('home-page')" class="w-full text-left p-3 hover:bg-blue-50 dark:hover:bg-slate-800 rounded-xl flex items-center gap-3"><i class="fas fa-home"></i> Home</button>
-            <button onclick="showPage('notes-page')" class="w-full text-left p-3 hover:bg-blue-50 dark:hover:bg-slate-800 rounded-xl flex items-center gap-3 text-blue-500 font-bold"><i class="fas fa-book"></i> Smart Notes</button>
-            <button onclick="showPage('papers-page')" class="w-full text-left p-3 hover:bg-purple-50 dark:hover:bg-slate-800 rounded-xl flex items-center gap-3 text-purple-500 font-bold"><i class="fas fa-file-alt"></i> Past Papers</button>
-            <button onclick="showPage('syllabus-page')" class="w-full text-left p-3 hover:bg-green-50 dark:hover:bg-slate-800 rounded-xl flex items-center gap-3 text-green-500 font-bold"><i class="fas fa-list"></i> Syllabus</button>
-            <button onclick="showPage('about-page')" class="w-full text-left p-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl flex items-center gap-3"><i class="fas fa-users"></i> About Us</button>
+        <nav class="space-y-4 font-semibold">
+            <button onclick="showPage('home')" class="w-full text-left p-3 hover:bg-blue-500/10 rounded-xl flex items-center gap-3"><i class="fas fa-home"></i> Dashboard</button>
+            <button onclick="showPage('science')" class="w-full text-left p-3 hover:bg-blue-500/10 rounded-xl flex items-center gap-3"><i class="fas fa-flask"></i> Science Notes</button>
+            <button onclick="showPage('math')" class="w-full text-left p-3 hover:bg-blue-500/10 rounded-xl flex items-center gap-3"><i class="fas fa-calculator"></i> Math Notes</button>
+            <hr class="opacity-10">
+            <button onclick="showPage('about')" class="w-full text-left p-3 hover:bg-blue-500/10 rounded-xl flex items-center gap-3"><i class="fas fa-info-circle"></i> About Us</button>
         </nav>
     </div>
 
-    <nav class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b dark:border-slate-800 px-6 py-4">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <button onclick="toggleMenu()" class="text-xl"><i class="fas fa-bars"></i></button>
-                <h1 class="font-black text-2xl tracking-tighter cursor-pointer" onclick="showPage('home-page')">CLASS 9 <span class="text-blue-500">AI</span></h1>
-            </div>
-            <button onclick="toggleTheme()" class="bg-slate-200 dark:bg-slate-800 p-2 rounded-full w-10 h-10"><i class="fas fa-circle-half-stroke"></i></button>
+    <nav class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b dark:border-slate-800 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-4">
+            <button onclick="toggleMenu()" class="p-2"><i class="fas fa-bars text-xl"></i></button>
+            <h1 class="font-black text-2xl tracking-tighter text-blue-600">C9<span class="text-slate-900 dark:text-white">AI</span></h1>
         </div>
+        <button onclick="toggleTheme()" class="w-10 h-10 bg-slate-200 dark:bg-slate-800 rounded-full"><i class="fas fa-moon"></i></button>
     </nav>
 
-    <div id="home-page" class="page-content p-6 max-w-7xl mx-auto py-12">
-        <div class="text-center mb-16">
-            <h2 class="text-5xl font-black mb-4">Choose Your Path</h2>
-            <p class="text-slate-500">Everything a Class 9 student needs, powered by AI.</p>
+    <div id="home" class="page-content p-6 max-w-5xl mx-auto py-10">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl md:text-6xl font-black mb-4">Master Class 9 with AI</h2>
+            <p class="opacity-60 text-lg">Ask anything, learn everything.</p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div onclick="showPage('notes-page')" class="grad-blue p-8 rounded-3xl text-white cursor-pointer hover:scale-105 transition-transform shadow-xl">
-                <i class="fas fa-book text-4xl mb-4"></i>
-                <h3 class="text-2xl font-bold">Smart Notes</h3>
-                <p class="opacity-80">AI-powered summaries for all subjects.</p>
-            </div>
-            <div onclick="showPage('papers-page')" class="grad-purple p-8 rounded-3xl text-white cursor-pointer hover:scale-105 transition-transform shadow-xl">
-                <i class="fas fa-file-invoice text-4xl mb-4"></i>
-                <h3 class="text-2xl font-bold">Past Papers</h3>
-                <p class="opacity-80">Last 10 years solved papers.</p>
-            </div>
-            <div onclick="showPage('syllabus-page')" class="grad-green p-8 rounded-3xl text-white cursor-pointer hover:scale-105 transition-transform shadow-xl">
-                <i class="fas fa-map text-4xl mb-4"></i>
-                <h3 class="text-2xl font-bold">Syllabus</h3>
-                <p class="opacity-80">Latest board updates for 2026.</p>
-            </div>
-        </div>
-    </div>
 
-    <div id="notes-page" class="page-content hidden p-6 max-w-7xl mx-auto py-12">
-        <div class="grad-blue p-12 rounded-[3rem] text-white mb-10 shadow-2xl">
-            <h2 class="text-4xl font-black mb-4">Class 9 Smart Notes</h2>
-            <p>Select a subject to get started with AI-generated quick revision notes.</p>
+        <div class="bg-white dark:bg-slate-900 p-8 rounded-[2rem] shadow-xl border border-blue-500/20 mb-10">
+            <textarea id="ai-input" placeholder="Ask a physics numerical or explain a biology concept..." 
+                class="w-full bg-slate-100 dark:bg-slate-800 p-5 rounded-2xl h-32 focus:outline-none focus:ring-2 ring-blue-500 mb-4 text-lg"></textarea>
+            <button onclick="askAI()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl hover:bg-blue-500 transition shadow-lg shadow-blue-500/20">Ask AI Teacher</button>
+            <div id="ai-output" class="hidden mt-6 p-6 bg-blue-50 dark:bg-slate-800/50 rounded-2xl border-l-4 border-blue-500"></div>
         </div>
+
+        <h3 class="text-2xl font-bold mb-6">Top Teacher Lectures</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border dark:border-slate-800 flex justify-between items-center">
-                <span>Physics: Motion & Laws</span>
-                <button class="bg-blue-600 px-4 py-2 rounded-lg text-sm">Read Notes</button>
-            </div>
-            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border dark:border-slate-800 flex justify-between items-center">
-                <span>Chemistry: Atoms & Molecules</span>
-                <button class="bg-blue-600 px-4 py-2 rounded-lg text-sm">Read Notes</button>
-            </div>
+            <a href="https://www.youtube.com/@PhysicsWallah" target="_blank" class="flex items-center gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border dark:border-slate-800 hover:scale-105 transition">
+                <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white"><i class="fab fa-youtube"></i></div>
+                <div><p class="font-bold">Alakh Pandey Sir</p><p class="text-xs opacity-50 text-blue-500 italic">Best for Physics/Chemistry</p></div>
+            </a>
+            <a href="https://www.youtube.com/@NextLevelEducation" target="_blank" class="flex items-center gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border dark:border-slate-800 hover:scale-105 transition">
+                <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white"><i class="fab fa-youtube"></i></div>
+                <div><p class="font-bold">Prashant Kirad</p><p class="text-xs opacity-50 text-blue-500 italic">Best for Strategy & Notes</p></div>
+            </a>
         </div>
     </div>
 
-    <div id="papers-page" class="page-content hidden p-6 max-w-7xl mx-auto py-12">
-        <div class="grad-purple p-12 rounded-[3rem] text-white mb-10 shadow-2xl text-center">
-            <h2 class="text-4xl font-black mb-4 uppercase tracking-widest">Question Bank</h2>
-            <p>Unlock the secrets of previous toppers with solved papers.</p>
-        </div>
-        <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border dark:border-slate-800">
-            <h3 class="font-bold text-xl mb-4">2025 Mid-Term Papers</h3>
-            <ul class="space-y-3">
-                <li class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg flex gap-3 items-center"><i class="fas fa-download text-purple-500"></i> Mathematics - Set A</li>
-                <li class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg flex gap-3 items-center"><i class="fas fa-download text-purple-500"></i> Science - Set B</li>
-            </ul>
-        </div>
-    </div>
+    <div id="science" class="page-content hidden p-6 max-w-5xl mx-auto py-10">
+        <h2 class="text-3xl font-bold mb-8">Science Study Center</h2>
+        <div class="space-y-6">
+            <div class="grad-physics p-8 rounded-3xl text-white">
+                <h3 class="text-2xl font-bold mb-2">Physics: Motion</h3>
+                <p class="opacity-90 mb-4">Learn about Velocity, Acceleration, and Equations of Motion.</p>
+                
 
-    <div id="syllabus-page" class="page-content hidden p-6 max-w-7xl mx-auto py-12">
-        <div class="grad-green p-12 rounded-[3rem] text-white mb-10 shadow-2xl">
-            <h2 class="text-4xl font-black mb-4">Official Syllabus 2026</h2>
-            <p>Know exactly what's coming in the exam.</p>
-        </div>
-        <div class="space-y-4">
-            <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border dark:border-slate-800">
-                <h4 class="font-bold text-green-500 mb-2 underline italic">Mathematics</h4>
-                <p class="text-sm opacity-70">Focus on Surface Areas, Volumes, and Circles.</p>
+[Image of distance-time graphs for uniform and non-uniform motion]
+
+                <a href="https://www.youtube.com/results?search_query=class+9+motion+physics+wallah" class="inline-block bg-white/20 px-4 py-2 rounded-lg text-sm font-bold">Watch Alakh Sir</a>
+            </div>
+            <div class="grad-chem p-8 rounded-3xl text-white">
+                <h3 class="text-2xl font-bold mb-2">Chemistry: Atoms</h3>
+                <p class="opacity-90 mb-4">Understanding the building blocks of matter.</p>
+                
+                <a href="https://www.youtube.com/results?search_query=class+9+atoms+and+molecules+physics+wallah" class="inline-block bg-white/20 px-4 py-2 rounded-lg text-sm font-bold">Watch Chemistry Lectures</a>
             </div>
         </div>
     </div>
 
-    <div id="about-page" class="page-content hidden p-6 max-w-7xl mx-auto py-12 text-center">
-        <h2 class="text-4xl font-bold mb-6">About Us</h2>
-        <div class="max-w-2xl mx-auto bg-white dark:bg-slate-900 p-10 rounded-3xl shadow-xl">
-            <p class="mb-6">We are a student-led initiative aiming to bring the power of Artificial Intelligence to the Class 9 classroom.</p>
-            <p class="text-sm text-slate-500 italic font-mono uppercase">Version 1.0.0 | Developer: Your Name</p>
+    <div id="about" class="page-content hidden p-6 max-w-3xl mx-auto py-20 text-center">
+        <h2 class="text-4xl font-black mb-6">About C9 AI</h2>
+        <p class="text-lg opacity-70 mb-10">We are a student-focused platform dedicated to making Class 9 exams easier using the power of AI and the best online teachers in India.</p>
+        <div class="p-6 bg-blue-500/5 rounded-3xl border border-blue-500/20">
+            <p class="text-sm font-mono uppercase tracking-widest text-blue-500">Developer: Faiz Choudhary</p>
         </div>
     </div>
 
     <footer class="mt-20 border-t dark:border-slate-800 p-10 text-center">
-        <div class="flex justify-center gap-6 mb-4 text-xl opacity-50">
-            <i class="fab fa-instagram"></i><i class="fab fa-twitter"></i><i class="fab fa-github"></i>
-        </div>
-        <p class="text-sm opacity-60 font-medium">© 2026 Class 9 AI Hub. All Rights Reserved.</p>
+        <p class="text-sm opacity-50 tracking-widest font-bold">© 2026 CLASS 9 AI HUB. ALL RIGHTS RESERVED.</p>
     </footer>
 
 </body>
